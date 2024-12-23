@@ -1,6 +1,7 @@
 using AutoMapper;
 using Domain.Entities;
 using Application.Services.Movies;
+using Application.Services.Fvorites;
 
 namespace Application.Mappings
 {
@@ -8,6 +9,9 @@ namespace Application.Mappings
     {
         public MappingProfiles()
         {
+            // Mapeamento entre FavoriteMovie e AddFavoriteDto
+            CreateMap<FavoriteMovie, AddFavoriteDto>().ReverseMap();
+
             // Mapeamento de FavoriteMovie para MovieSummary (e vice-versa, se necessário)
             CreateMap<FavoriteMovie, MovieSummary>();
             CreateMap<MovieSummary, FavoriteMovie>()

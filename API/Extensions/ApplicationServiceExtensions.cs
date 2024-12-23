@@ -5,6 +5,7 @@ using Application.Interfaces;
 using Infrastructure.Movies;
 using Application.Mappings;
 using MediatR;
+using Infrastructure.Security;
 
 namespace API.Extensions;
 
@@ -31,6 +32,7 @@ public static class ApplicationServiceExtensions
         services.AddMediatR(typeof(Application.Services.Favorites.List.Handler).Assembly);
         services.AddAutoMapper(typeof(MappingProfiles).Assembly);
         services.AddScoped<IOmdbApiService, OmdbApiService>();
+        services.AddScoped<IUserAccessor, UserAccessor>();
         services.AddHttpClient<IOmdbApiService, OmdbApiService>();
 
         return services;

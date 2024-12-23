@@ -1,4 +1,5 @@
 using Application.Services.Favorites;
+using Application.Services.Fvorites;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -26,7 +27,7 @@ public class FavoritesController : BaseApiController
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddFavoriteMovie(FavoriteMovie favoriteMovie)
+    public async Task<IActionResult> AddFavoriteMovie(AddFavoriteDto favoriteMovie)
     {
         var result = await _mediator.Send(new Create.Command { FavoriteMovie = favoriteMovie });
         return HandleResult(result);
