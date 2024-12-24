@@ -41,7 +41,19 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors("CorsPolicy");
+    app.MapOpenApi();
+}
+else
+{
+    app.UseCors("CorsPolicy");
+}
+
+app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllers();
 

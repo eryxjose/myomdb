@@ -37,6 +37,7 @@ public class Create
                 
             var favoriteMovie = new FavoriteMovie
             {
+                Id = request.FavoriteMovie.Id,
                 UserId = user.Id,
                 Title = request.FavoriteMovie.Title,
                 Year = request.FavoriteMovie.Year,
