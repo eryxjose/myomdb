@@ -1,3 +1,4 @@
+using Application.Core;
 using Application.Services.Favorites;
 using Application.Services.Fvorites;
 using Domain.Entities;
@@ -20,10 +21,10 @@ public class FavoritesController : BaseApiController
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetFavoriteMovies()
+    public async Task<IActionResult> GetFavoriteMovies([FromQuery] PagingParams pagingParams)
     {
-        var result = await _mediator.Send(new List.Query());
-        return HandleResult(result);
+        var result = await _mediator.Send(new List.Query { PagingParams = pagingParams });
+        return HandlePagedResult(result);
     }
 
     [HttpPost]

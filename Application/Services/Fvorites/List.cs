@@ -9,11 +9,12 @@ namespace Application.Services.Favorites;
 
 public class List
 {
-    public class Query : IRequest<Result<List<FavoriteMovie>>>
+    public class Query : IRequest<Result<PagedList<FavoriteMovie>>>
     {
+        public PagingParams PagingParams { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, Result<List<FavoriteMovie>>>
+    public class Handler : IRequestHandler<Query, Result<PagedList<FavoriteMovie>>>
     {
         private readonly DataContext _context;
         private readonly IUserAccessor _userAccessor;
@@ -24,7 +25,7 @@ public class List
             _userAccessor = userAccessor;
         }
 
-        public async Task<Result<List<FavoriteMovie>>> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<Result<PagedList<FavoriteMovie>>> Handle(Query request, CancellationToken cancellationToken)
         {
             // Obter o usuário logado 
             var user = await _context.Users
@@ -32,14 +33,19 @@ public class List
                 .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername(), cancellationToken);
 
             if (user == null)
-                return Result<List<FavoriteMovie>>.Failure("Usuário não encontrado.");
+                return Result<PagedList<FavoriteMovie>>.Failure("Usuário não encontrado.");
 
-            var favoriteMovies = await _context.FavoriteMovies
+            var query = _context.FavoriteMovies
+                .OrderBy(x => x.Title)
                 .Where(x => x.UserId == user.Id)
                 .AsNoTracking()
-                .ToListAsync(cancellationToken);
+                .AsQueryable();
+                //.ToListAsync(cancellationToken);
 
-            return Result<List<FavoriteMovie>>.Success(favoriteMovies);
+            return Result<PagedList<FavoriteMovie>>.Success(
+                await PagedList<FavoriteMovie>.CreateAsync(query, request.PagingParams.PageNumber, 
+                    request.PagingParams.PageSize)
+            );
         }
     }
 }

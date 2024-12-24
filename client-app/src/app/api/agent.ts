@@ -5,6 +5,7 @@ import { store } from '../stores/store';
 import { User, UserFormValues } from '../models/user';
 import { MovieSummary, MovieDetail } from '../models/movie';
 import { FavoriteMovie } from '../models/favorite';
+import { PaginatedResult } from '../models/pagination';
 
 // const sleep = (delay: number) => {
 //     return new Promise((resolve) => {
@@ -26,6 +27,11 @@ axios.interceptors.request.use((config) => {
 axios.interceptors.response.use(
     async (response) => {
         //await sleep(2000); // Simular atraso, se necessário
+        const pagination = response.headers['pagination'];
+        if (pagination) {
+            response.data = new PaginatedResult(response.data, JSON.parse(pagination));
+            return response as AxiosResponse<PaginatedResult<any>>;
+        }
         return response;
     },
     (error: AxiosError) => {
@@ -90,7 +96,8 @@ const Movies = {
 
 // Serviços relacionados a favoritos
 const Favorites = {
-    list: () => requests.get<FavoriteMovie[]>('/favorites'),
+    list: (params: URLSearchParams) => axios.get<PaginatedResult<FavoriteMovie[]>>('/favorites', {params})
+        .then(responseBody),
     add: (favorite: FavoriteMovie) => requests.post<void>('/favorites', favorite),
     remove: (id: string) => requests.del<void>(`/favorites/${id}`),
 };

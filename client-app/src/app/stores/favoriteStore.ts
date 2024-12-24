@@ -2,15 +2,29 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { FavoriteMovie } from "../models/favorite";
 import agent from "../api/agent";
 import { v4 as uuid } from "uuid";
+import { Pagination, PagingParams } from "../models/pagination";
 
 export default class FavoriteStore {
     // favoriteMovies: FavoriteMovie[] = [];
     favoriteRegistry = new Map<string, FavoriteMovie>();
     loading = false;
     loadingInitial = true;
+    pagination: Pagination | null = null;
+    pagingParams = new PagingParams();
 
     constructor() {
         makeAutoObservable(this);
+    }
+
+    setPagingParams = (pagingParams: PagingParams) => {
+        this.pagingParams = pagingParams;
+    }
+
+    get axiosParams() {
+        const params = new URLSearchParams();
+        params.append("pageNumber", this.pagingParams.pageNumber.toString());
+        params.append("pageSize", this.pagingParams.pageSize.toString());
+        return params;
     }
 
     // Getter para retornar favoritos ordenados por título
@@ -28,16 +42,14 @@ export default class FavoriteStore {
     loadFavorites = async () => {
         this.setLoadingInitial(true);
         try {
-            const favorites = await agent.Favorites.list();
-            debugger;
+            const result = await agent.Favorites.list(this.axiosParams);
             runInAction(() => {
-                this.favoriteRegistry.clear();
-                // favorites.forEach((favorite) => this.setFavorite(favorite));
-                favorites.forEach((favorite) => {
-                    debugger;
-                    console.log(favorite);
-                    this.favoriteRegistry.set(favorite.id, favorite);
-                });
+                // this.favoriteRegistry.clear();
+                result.data.forEach((favorite) => this.setFavorite(favorite));
+                // favorites.forEach((favorite) => {
+                //     this.favoriteRegistry.set(favorite.id, favorite);
+                // });
+                this.setPagination(result.pagination);
                 this.setLoadingInitial(false);
             });
         } catch (error) {
@@ -46,6 +58,9 @@ export default class FavoriteStore {
         }
     };
 
+    setPagination = (pagination: Pagination) => {
+        this.pagination = pagination;
+    }
 
     // Adicionar um favorito
     addFavorite = async (favorite: FavoriteMovie) => {

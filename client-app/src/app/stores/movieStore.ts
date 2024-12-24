@@ -8,6 +8,7 @@ export default class MovieStore {
     searchQuery: string = "";
     loading = false;
     loadingInitial = true;
+    page = 1;
 
     constructor() {
         makeAutoObservable(this);
@@ -27,7 +28,7 @@ export default class MovieStore {
         this.setLoadingInitial(true);
         
         try {
-            const movies = await agent.Movies.search(searchQuery, 1);
+            const movies = await agent.Movies.search(searchQuery, this.page);
             runInAction(() => {
                 this.movieRegistry.clear(); // Limpa o registro atual
                 movies.forEach((movie) => this.setMovie(movie));

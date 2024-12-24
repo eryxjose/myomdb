@@ -1,11 +1,18 @@
 import { AppBar, Toolbar, Typography, Button, Box, Menu, MenuItem } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useStore } from "../stores/store";
+import { observer } from "mobx-react-lite";
 
-export default function NavBar() {
-    const {userStore: {user, logout}} = useStore();
+function NavBar() {
+    const {userStore } = useStore();
+    const { user, logout, isLoggedIn } = userStore;
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+    useEffect(() => {
+        userStore.getUser();
+    }, [userStore, isLoggedIn]);
+    console.log(isLoggedIn);
 
     const handleMenuClose = () => {
         setAnchorEl(null);
@@ -41,8 +48,9 @@ export default function NavBar() {
                         Favoritos
                     </Button>
                 </Box>
-                {user && (
+                {user && isLoggedIn && (
                     <Box sx={{ marginLeft: 2, display: "flex", alignItems: "center" }}>
+                        {user.displayName}
                         <Menu
                             anchorEl={anchorEl}
                             open={Boolean(anchorEl)}
@@ -73,3 +81,5 @@ export default function NavBar() {
         </AppBar>
     );
 }
+
+export default observer(NavBar);
