@@ -65,16 +65,28 @@ public class FavoriteMoviesTests
         // Criar o handler
         var handler = new List.Handler(context, _mockUserAccessor.Object);
 
+        // Configurar parâmetros de paginação
+        var pagingParams = new PagingParams
+        {
+            PageNumber = 1,
+            PageSize = 10
+        };
+
+        var query = new List.Query { PagingParams = pagingParams };
+
         // Act
-        var result = await handler.Handle(new List.Query(), default);
+        var result = await handler.Handle(query, default);
 
         // Assert
+        Assert.NotNull(result); // Certifica-se de que o resultado não é nulo
         Assert.True(result.IsSuccess); // A operação deve ser bem-sucedida
-        Assert.Equal(2, result.Value.Count); // Deve retornar 2 favoritos
+        Assert.NotNull(result.Value); // Certifica-se de que o resultado contém valores
+        Assert.Equal(2, result.Value.Count); // Deve retornar os 2 favoritos do usuário logado
 
         // Verificar se os filmes retornados pertencem ao usuário logado
-        Assert.All(result.Value, movie => Assert.Equal(userId, movie.UserId));
+        Assert.All(result.Value, movie => Assert.Contains(movie.ImdbId, favoriteMovies.Select(f => f.ImdbId)));
     }
+
 
 
     [Fact]
