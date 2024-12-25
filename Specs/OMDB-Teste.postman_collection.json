@@ -1,0 +1,429 @@
+{
+	"info": {
+		"_postman_id": "dce773e2-01b1-4600-aaff-e6b0e590ec29",
+		"name": "OMDB-Teste",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1719412",
+		"_collection_link": "https://blue-satellite-583390.postman.co/workspace/Syn-Sa%C3%BAde~8ef64aa9-e896-48c4-81b1-8b5840b05055/collection/1719412-dce773e2-01b1-4600-aaff-e6b0e590ec29?action=share&source=collection_link&creator=1719412"
+	},
+	"item": [
+		{
+			"name": "Account",
+			"item": [
+				{
+					"name": "Login Jimmie94@hotmail.com",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Verifica se o status de resposta é 200 (sucesso)\r",
+									"pm.test(\"Login realizado com sucesso\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Captura o token JWT da resposta, assumindo que ele está na propriedade 'token' da resposta JSON\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.globals.set(\"token\", jsonData.token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"email\": \"Jimmie94@hotmail.com\", // \r\n\t\"password\": \"Password123!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/account/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"account",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login eryx.guimaraes@gmail.com",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Verifica se o status de resposta é 200 (sucesso)\r",
+									"pm.test(\"Login realizado com sucesso\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Captura o token JWT da resposta, assumindo que ele está na propriedade 'token' da resposta JSON\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.globals.set(\"token\", jsonData.token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"email\": \"eryx.guimaraes@gmail.com\", // \r\n\t\"password\": \"Pass123!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/account/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"account",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"displayName\": \"Eryx\",\r\n    \"username\": \"eryx\",\r\n    \"email\": \"eryx.guimaraes@gmail.com\",\r\n    \"password\": \"Password123!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/account",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Current User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/account",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"account"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Movies",
+			"item": [
+				{
+					"name": "Search",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/movies/search?title=casa&page=1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"movies",
+								"search"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "casa"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Copy",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/movies/search?title=casa&page=1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"movies",
+								"search"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "casa"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/movies/tt1702425",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"movies",
+								"tt1702425"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Favorites",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/Favorites",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Favorites"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"imdbId\": \"tt1702425\",\r\n    \"title\": \"Casa de mi Padre\",\r\n    \"year\": \"2012\",\r\n    \"poster\": \"https://example.com/poster.jpg\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/Favorites",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Favorites"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/Favorites/b157b603-ce27-4d82-9db0-25a9cc9e0f8c",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Favorites",
+								"b157b603-ce27-4d82-9db0-25a9cc9e0f8c"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Temp",
+			"item": [
+				{
+					"name": "Pesquisa por Título ou ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://www.omdbapi.com/?t=casa&y=2010&plot=full&apikey=3124c63f",
+							"protocol": "http",
+							"host": [
+								"www",
+								"omdbapi",
+								"com"
+							],
+							"path": [
+								""
+							],
+							"query": [
+								{
+									"key": "t",
+									"value": "casa"
+								},
+								{
+									"key": "y",
+									"value": "2010"
+								},
+								{
+									"key": "plot",
+									"value": "full"
+								},
+								{
+									"key": "apikey",
+									"value": "3124c63f"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pesquisa Generica",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://www.omdbapi.com/?s=casa&y=2010&plot=full&apikey=3124c63f",
+							"protocol": "http",
+							"host": [
+								"www",
+								"omdbapi",
+								"com"
+							],
+							"path": [
+								""
+							],
+							"query": [
+								{
+									"key": "s",
+									"value": "casa"
+								},
+								{
+									"key": "y",
+									"value": "2010"
+								},
+								{
+									"key": "plot",
+									"value": "full"
+								},
+								{
+									"key": "apikey",
+									"value": "3124c63f"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
