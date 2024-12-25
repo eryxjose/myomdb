@@ -60,7 +60,7 @@ export default class FavoriteStore {
 
     // Adicionar um favorito
     addFavorite = async (favorite: FavoriteMovie) => {
-        this.setLoadingInitial(true);
+        this.setLoading(true);
         
         const newFavorite: FavoriteMovie = {
             ...favorite,
@@ -71,11 +71,11 @@ export default class FavoriteStore {
             await agent.Favorites.add(newFavorite);
             runInAction(() => {
                 this.favoriteRegistry.set(newFavorite.id, newFavorite);
-                this.setLoadingInitial(false);
+                this.setLoading(false);
             });
         } catch (error) {
             console.error("Failed to add favorite:", error);
-            this.setLoadingInitial(false);
+            this.setLoading(false);
         }
     };
 
@@ -108,6 +108,10 @@ export default class FavoriteStore {
     setLoadingInitial = (state: boolean) => {
         this.loadingInitial = state;
     };
+
+    setLoading = (state: boolean) => {
+        this.loading = state;
+    }
 
     clearFavorites = () => {
         this.favoriteRegistry.clear();

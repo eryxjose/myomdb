@@ -5,7 +5,7 @@ interface Props {
     content?: string;
 }
 
-export default function LoadingComponent({ inverted = true, content = "Loading..." }: Props) {
+export default function LoadingComponent({ inverted = false, content = "Loading..." }: Props) {
     return (
         <Box 
             sx={{

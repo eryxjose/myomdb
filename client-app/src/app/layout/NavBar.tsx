@@ -1,5 +1,5 @@
 import { AppBar, Toolbar, Typography, Button, Box, Menu, MenuItem, IconButton, Avatar } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useStore } from "../stores/store";
 import { observer } from "mobx-react-lite";
@@ -8,30 +8,35 @@ import { router } from "../router/Routes";
 function NavBar() {
     const {userStore } = useStore();
     const { user, logout, isLoggedIn } = userStore;
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-    useEffect(() => {
-        userStore.getUser();
-    }, [userStore, isLoggedIn]);
     
+    const location = useLocation(); // Obtemos a URL atual
+    const navigate = useNavigate();
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    
+    const handleMenuClose = () => setAnchorEl(null);
+
     useEffect(() => {
         if (!user) {
             router.navigate('/');
         }
     }, [user]);
+    
+    const isMovies = location.pathname.startsWith("/movies");
+    const isFavorites = location.pathname.startsWith("/favorites");
+    const isHome = location.pathname === "/";
 
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-    };
 
     return (
         <AppBar position="fixed">
             <Toolbar>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                     <Button
-                    color="inherit"
-                    component={Link}
-                    to="/"
+                        color="inherit"
+                        onClick={() => navigate("/")}
+                        sx={{
+                            textDecoration: isHome ? "underline" : "none",
+                            fontWeight: isHome ? "bold" : "normal",
+                        }}
                     >
                     MyOMDB
                     </Button>
@@ -39,17 +44,21 @@ function NavBar() {
                 <Box>
                     <Button
                         color="inherit"
-                        component={Link}
-                        to="/movies"
+                        onClick={() => navigate("/movies")}
+                        sx={{
+                            textDecoration: isMovies ? "underline" : "none",
+                            fontWeight: isMovies ? "bold" : "normal",
+                        }}
                     >
                         Filmes
                     </Button>
-                    <Button
-                        color="secondary"
-                        variant="contained"
-                        sx={{ marginLeft: 2 }}
-                        component={Link}
-                        to="/favorites"
+                        <Button
+                        color="inherit"
+                        onClick={() => navigate("/favorites")}
+                        sx={{
+                            textDecoration: isFavorites ? "underline" : "none",
+                            fontWeight: isFavorites ? "bold" : "normal",
+                        }}
                     >
                         Favoritos
                     </Button>
