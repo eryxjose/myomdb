@@ -140,17 +140,6 @@ A aplicação backend segue uma arquitetura em camadas bem definida, utilizando 
 
 Essa arquitetura garante uma aplicação backend robusta, escalável e fácil de manter. As boas práticas de design, como a separação em camadas e o uso de padrões como CQRS, tornam o sistema bem estruturado para atender às necessidades da aplicação MyOMDb.
 
-
-### **Frontend**
-- **Linguagem:** JavaScript/TypeScript
-- **Framework:** React 18
-- **Gerenciamento de Estado:** MobX
-- **Estilização:** Material-UI (MUI)
-- **Bibliotecas Auxiliares:**
-  - React Router para roteamento.
-  - Axios para chamadas HTTP ao backend.
-  - react-router-dom para navegação.
-
 ### Endpoints
 
   * Busca filmes utilizando a OMDbAPI.
@@ -173,6 +162,193 @@ Essa arquitetura garante uma aplicação backend robusta, escalável e fácil de
 	```
 	DELETE/favorites/{id}
 	```
+
+---
+
+### Descrição da Arquitetura do Frontend da Aplicação
+
+- **Linguagem:** JavaScript/TypeScript
+- **Framework:** React 18
+- **Gerenciamento de Estado:** MobX
+- **Estilização:** Material-UI (MUI)
+- **Bibliotecas Auxiliares:**
+  - React Router para roteamento.
+  - Axios para chamadas HTTP ao backend.
+  - react-router-dom para navegação.
+
+### **Descrição da Arquitetura, Bibliotecas e Fluxo para o Frontend**
+
+O frontend da aplicação **MyOMDB** foi projetado para ser modular, escalável e altamente reativo. Ele utiliza as tecnologias e bibliotecas mais modernas para criar uma interface amigável e responsiva.
+
+---
+
+### **Arquitetura do Frontend**
+A aplicação segue uma estrutura baseada em componentes e é organizada para garantir separação de responsabilidades e facilidade de manutenção.
+
+1. **Camadas Principais:**
+   - **Componentes:** Contém os componentes de UI que são reutilizáveis, como botões, caixas de texto, e listas de filmes.
+   - **Páginas:** Contém as telas principais da aplicação, como a página de busca de filmes, favoritos e detalhes.
+   - **Stores (Gerenciamento de Estado):** Utiliza **MobX** para gerenciar o estado global da aplicação, incluindo informações de autenticação, busca de filmes e favoritos.
+   - **Serviços:** Implementa abstrações para consumo de APIs externas (como a OMDb API) e para lidar com operações relacionadas à autenticação e gerenciamento de dados.
+   - **Roteamento:** Configurado com **React Router** para navegar entre páginas como login, busca de filmes e favoritos.
+
+2. **Estrutura de Pastas:**
+
+```
+src/
+├── app/
+│   ├── api/               # Serviços de integração com APIs externas e backend
+│   ├── common/            # Componentes e utilitários reutilizáveis
+│   │   ├── form/          # Componentes customizados para formulários
+│   │   └── modals/        # Componentes de modais reutilizáveis
+│   ├── layout/            # Componentes de layout global (e.g., App, NavBar)
+│   ├── models/            # Interfaces e tipos para padronização de dados
+│   ├── router/            # Configuração e gerenciamento de rotas
+│   └── stores/            # MobX stores para estado global da aplicação
+├── features/              # Módulos específicos de funcionalidades
+│   ├── errors/            # Páginas e componentes para tratamento de erros
+│   ├── favorites/         # Tela e lógica para gerenciamento de favoritos
+│   ├── home/              # Página inicial da aplicação
+│   ├── movies/            # Funcionalidades relacionadas à busca e exibição de filmes
+│   └── users/             # Funcionalidades relacionadas à autenticação e gerenciamento de usuários
+```
+
+### **Detalhes sobre as Pastas**
+
+1. **`app/`:** Contém configurações e funcionalidades globais da aplicação.
+   - **`api/`:** Abstrações para chamadas de APIs, como integração com a OMDb API e endpoints do backend.
+   - **`common/`:**
+     - **`form/`:** Contém componentes customizados reutilizáveis para formulários, como `MyTextInput`.
+     - **`modals/`:** Componentes para exibição de modais, utilizados em várias partes da aplicação.
+   - **`layout/`:** Componentes principais do layout global, como `App.tsx` e `NavBar.tsx`.
+   - **`models/`:** Define interfaces e tipos para garantir consistência de dados em toda a aplicação (e.g., `Movie`, `FavoriteMovie`).
+   - **`router/`:** Configuração centralizada do roteamento utilizando React Router.
+   - **`stores/`:** Stores do MobX para gerenciamento de estado global (e.g., `movieStore`, `userStore`).
+
+2. **`features/`:** Módulos específicos para cada funcionalidade da aplicação.
+   - **`errors/`:** Componentes e páginas para lidar com erros (e.g., `NotFound`, `ServerError`).
+   - **`favorites/`:** Tela e lógica para exibir e gerenciar a lista de filmes favoritos.
+   - **`home/`:** Página inicial da aplicação (exibida em `/`).
+   - **`movies/`:** Funcionalidades relacionadas à busca, exibição de lista e detalhes de filmes.
+   - **`users/`:** Gerenciamento de autenticação e usuários (e.g., `LoginForm`, `RegisterForm`).
+
+---
+
+### **Como a Estrutura Suporta a Arquitetura**
+
+- **Modularidade:** Cada funcionalidade (como filmes ou favoritos) tem seu próprio módulo dentro de `features`, mantendo a lógica isolada.
+- **Reutilização:** Componentes comuns e utilitários estão centralizados em `app/common`, facilitando o uso em diferentes partes do projeto.
+- **Gerenciamento Centralizado:** O uso de `app/stores` para MobX garante que o estado global esteja bem organizado e acessível.
+
+---
+
+### **Bibliotecas Utilizadas**
+
+#### **1. React**
+- Framework principal para construção da interface do usuário.
+- Utiliza **Hooks** como `useState`, `useEffect` e `useContext` para lidar com o estado e o ciclo de vida dos componentes.
+
+#### **2. MobX**
+- Biblioteca para gerenciamento de estado global.
+- Utiliza **stores** para organizar o estado da aplicação (por exemplo, `movieStore`, `userStore`, etc.).
+- Observa as mudanças de estado com o decorador `@observable` e propaga as mudanças para os componentes com o wrapper `observer`.
+
+#### **3. React Router**
+- Gerencia as rotas da aplicação e fornece navegação entre as páginas.
+- Suporte a rotas privadas e protegidas (ex.: `/favorites` só acessível após login).
+- Configuração principal das rotas no arquivo `Routes.tsx`.
+
+#### **4. Material-UI (MUI)**
+- Framework de componentes de interface para estilização.
+- Componentes como `Button`, `TextField`, `Typography`, e `CircularProgress` são amplamente utilizados.
+- Customização de temas e estilos globais para manter a identidade visual.
+
+#### **5. Axios**
+- Biblioteca para fazer requisições HTTP.
+- Usado para interagir com o backend e a OMDb API.
+- Configurado para adicionar tokens de autenticação em cabeçalhos automaticamente.
+
+#### **6. React-Toastify**
+- Biblioteca para exibir notificações amigáveis ao usuário.
+- Usada para mensagens de sucesso (ex.: "Filme adicionado aos favoritos!") ou erro.
+
+#### **7. Infinite Scroller**
+- Biblioteca para implementação de carregamento infinito (scroll infinito).
+- Utilizada na listagem de filmes, carregando mais dados à medida que o usuário rola a página.
+
+#### **8. Formik e Yup**
+- Gerenciamento e validação de formulários.
+- **Formik:** Usado para lidar com os dados e eventos dos formulários.
+- **Yup:** Validação dos campos de formulário com esquemas personalizáveis.
+
+---
+
+### **Fluxo do Frontend**
+
+#### **1. Autenticação**
+- O usuário realiza o login ou registro na aplicação.
+- Após o login, o token JWT é armazenado no `localStorage` e no estado global.
+- O frontend valida o token ao carregar a aplicação para determinar se o usuário está autenticado.
+
+#### **2. Busca de Filmes**
+- O usuário digita um título de filme na caixa de pesquisa e clica no botão **Search**.
+- O texto da pesquisa é armazenado no estado (`searchQuery`).
+- Uma requisição é feita para a OMDb API para buscar filmes relacionados.
+- Os resultados são armazenados no `movieStore` e exibidos em uma lista.
+
+#### **3. Carregamento Infinito**
+- Na página de resultados, o usuário pode rolar para carregar mais filmes.
+- A cada scroll, uma nova página de filmes é buscada na OMDb API.
+- A biblioteca **Infinite Scroller** lida com os eventos de scroll.
+
+#### **4. Favoritos**
+- O usuário pode adicionar ou remover filmes da lista de favoritos.
+- As ações disparam requisições para o backend (SQLite) para persistir as alterações.
+- A lista de favoritos é armazenada no `favoriteStore` e exibida na página **Favorites**.
+
+#### **5. Detalhes do Filme**
+- O usuário pode clicar em um filme para ver seus detalhes.
+- Os detalhes do filme são buscados pela OMDb API com base no `imdbId`.
+- As informações incluem título, ano, gênero, diretor, atores e sinopse.
+
+#### **6. Logout**
+- O token é removido do `localStorage`.
+- O estado global é resetado e o usuário é redirecionado para a página de login.
+
+---
+
+### **Componentes e Páginas Principais**
+
+#### **1. MovieDashboard**
+- Tela de busca de filmes.
+- Inclui:
+  - Campo de busca com botão de limpar (`X`).
+  - Botão de pesquisa com carregamento (`loading`).
+  - Exibição de resultados com scroll infinito.
+
+#### **2. MovieDetails**
+- Exibe informações detalhadas de um filme selecionado.
+- Inclui:
+  - Título, ano, gênero, atores, e outros detalhes.
+  - Opção para adicionar ou remover dos favoritos.
+
+#### **3. Favorites**
+- Exibe a lista de filmes favoritos do usuário.
+- Opções para remover filmes da lista.
+
+#### **4. RegisterForm / LoginForm**
+- Formulários para registro e login do usuário.
+- Incluem validação de campos com **Yup** e exibição de mensagens de erro.
+
+---
+
+### **Pontos de Destaque**
+1. **Modularidade e Reutilização:**
+   - Componentes e lógica desacoplados para fácil manutenção.
+2. **UX Melhorada:**
+   - Notificações amigáveis, carregamento infinito e feedback visual (botão de busca com `CircularProgress`).
+3. **Gerenciamento Centralizado:**
+   - MobX fornece um estado reativo, reduzindo dependências diretas entre componentes.
 
 ---
 
