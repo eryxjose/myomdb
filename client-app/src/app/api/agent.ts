@@ -35,6 +35,7 @@ axios.interceptors.response.use(
         return response;
     },
     (error: AxiosError) => {
+        debugger;
         console.error('Erro na requisição:', error);
         console.error('Config:', error.config);
         console.error('Resposta:', error.response);

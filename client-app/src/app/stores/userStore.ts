@@ -26,7 +26,7 @@ export default class UserStore {
             router.navigate('/movies');
             console.log('Navigating to /movies'); // Atualize para a rota apropriada
         } catch (error) {
-            toast.error('Falha no login. Verifique suas credenciais.');
+            toast.error('Login failed.');
             throw error;
         }
     };
@@ -38,7 +38,7 @@ export default class UserStore {
             this.user = null;
         });
         store.favoriteStore.clearFavorites(); 
-        toast.info('Você saiu do sistema.');
+        toast.info('Logout successful.');
         router.navigate('/');
     };
 
@@ -50,25 +50,38 @@ export default class UserStore {
                 this.user = user;
             });
         } catch (error) {
-            console.log('Erro ao obter o usuário atual:', error);
+            console.log('Error:', error);
         }
     };
 
     register = async (creds: UserFormValues) => {
         try {
             const user = await agent.Account.register(creds);
+            
+            // Armazena o token e atualiza o estado do usuário
             store.commonStore.setToken(user.token);
             runInAction(() => {
                 this.user = user;
             });
-            router.navigate('/movies'); // Atualize para a rota apropriada
-            store.modalStore?.closeModal(); // Verifique se modalStore está sendo usado
-            toast.success('Registro realizado com sucesso!');
+            
+            // Navega para a rota de filmes
+            router.navigate('/movies');
+            console.log("Redirecionado para /movies"); 
+            // Fecha o modal, se aplicável
+            if (store.modalStore) store.modalStore.closeModal();
+            
+            // Exibe uma mensagem de sucesso
+            toast.success('User created!');
         } catch (error) {
-            toast.error('Erro ao realizar o registro.');
-            throw error;
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error('An unknown error occurred.');
+            }
+            throw error; // Relança o erro para ser tratado posteriormente
         }
     };
+    
 
     setDisplayName = (name: string) => {
         if (this.user) {

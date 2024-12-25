@@ -4,9 +4,11 @@ import { useStore } from "../../app/stores/store";
 import * as Yup from "yup";
 import MyTextInput from "../../app/common/form/MyTextInput";
 import { Box, Button, Typography, Alert } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default observer(function RegisterForm() {
     const { userStore } = useStore();
+    const navigate = useNavigate();
 
     return (
         <Formik
@@ -17,11 +19,7 @@ export default observer(function RegisterForm() {
                 password: "",
                 error: null,
             }}
-            onSubmit={(values, { setErrors }) =>
-                userStore
-                    .register(values)
-                    .catch((error) => setErrors({ error }))
-            }
+            onSubmit={(values, { setErrors }) => userStore.register(values).then(() => navigate("/movies")).catch((error) => setErrors({ error }))}
             validationSchema={Yup.object({
                 displayName: Yup.string().required("Display Name is required"),
                 username: Yup.string().required("Username is required"),
