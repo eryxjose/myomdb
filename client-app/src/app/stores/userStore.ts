@@ -38,6 +38,7 @@ export default class UserStore {
             this.user = null;
         });
         store.favoriteStore.clearFavorites(); 
+        store.movieStore.clearSearch();
         toast.info('Logout successful.');
         router.navigate('/');
     };

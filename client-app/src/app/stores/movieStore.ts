@@ -83,6 +83,10 @@ export default class MovieStore {
         this.selectedMovie = undefined;
     };
 
+    clearSearch() {
+        this.searchQuery = '';
+    }
+
     setLoadingInitial = (state: boolean) => {
         this.loadingInitial = state;
     };
@@ -91,5 +95,11 @@ export default class MovieStore {
         if (this.currentPage * 10 >= this.totalResults) return; // Sem mais páginas para carregar
         this.currentPage++;
         await this.loadMovies();
+    };
+
+    clearMovies = () => {
+        this.movieRegistry.clear();
+        this.totalResults = 0;
+        this.currentPage = 1;
     };
 }
