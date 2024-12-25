@@ -7,9 +7,9 @@ import RegisterForm from "../users/RegisterForm";
 
 const HomePage = () => {
     const { userStore, modalStore } = useStore();
-    const { user } = userStore;
+    const { isLoggedIn, user } = userStore;
     const theme = useTheme();
-
+    
     return (
         <Box
             sx={{
@@ -28,10 +28,10 @@ const HomePage = () => {
                 <Typography variant="h3" gutterBottom>
                     Bem-vindo ao Sistema MyOMDB
                 </Typography>
-                {userStore.isLoggedIn ? (
+                {user && isLoggedIn ? (
                     <>
                         <Typography variant="h5" gutterBottom>
-                            Bem-vindo de volta {user?.displayName}!
+                            Bem-vindo de volta {user.displayName}!
                         </Typography>
                         <Button
                             component={Link}
@@ -40,6 +40,9 @@ const HomePage = () => {
                             color="primary"
                             size="large"
                             sx={{ mt: 2 }}
+                            onClick={() => {
+                                console.log("Navigating to /movies");
+                            }}
                         >
                             Pesquisar Filmes
                         </Button>

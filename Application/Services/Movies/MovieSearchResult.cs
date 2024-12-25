@@ -1,5 +1,3 @@
-using Domain.Entities;
-
 namespace Application.Services.Movies;
 
 public class MovieSearchResult

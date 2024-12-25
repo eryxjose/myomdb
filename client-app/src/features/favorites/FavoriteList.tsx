@@ -9,8 +9,8 @@ interface Props {
 const FavoriteList = ({ favorites }: Props) => {
     return (
         <Grid container spacing={2}>
-            {favorites.map((favorite, index) => (
-                <Grid item key={favorite.imdbId || index} xs={12} sm={6} md={4} lg={3}>
+            {favorites.map((favorite) => (
+                <Grid item key={favorite.imdbId} xs={12} sm={6} md={4} lg={3}>
                     <Box>
                         <FavoriteListItem favorite={favorite} />
                     </Box>

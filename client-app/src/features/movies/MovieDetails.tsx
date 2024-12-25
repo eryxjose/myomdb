@@ -5,7 +5,6 @@ import {
     Box,
     Button,
     Container,
-    CircularProgress,
     Grid,
     Typography,
     Card,
@@ -13,9 +12,12 @@ import {
     CardContent,
 } from "@mui/material";
 import { useStore } from "../../app/stores/store";
+import LoadingComponent from "../../app/layout/LoadingComponent";
 
 const MovieDetails = () => {
     const { movieStore } = useStore();
+    const { selectedMovie, loadingInitial } = movieStore;
+    
     const { id } = useParams<{ id: string }>();
 
     useEffect(() => {
@@ -28,14 +30,10 @@ const MovieDetails = () => {
         };
     }, [id, movieStore]);
 
-    const { selectedMovie, loadingInitial } = movieStore;
+    
 
     if (loadingInitial) {
-        return (
-            <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-                <CircularProgress />
-            </Box>
-        );
+        return <LoadingComponent content="Loading....." />;
     }
 
     if (!selectedMovie) {

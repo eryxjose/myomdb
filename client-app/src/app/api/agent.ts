@@ -3,15 +3,15 @@ import { toast } from 'react-toastify';
 import { router } from '../router/Routes';
 import { store } from '../stores/store';
 import { User, UserFormValues } from '../models/user';
-import { MovieSummary, MovieDetail } from '../models/movie';
+import { MovieDetail, MovieSearchResult } from '../models/movie';
 import { FavoriteMovie } from '../models/favorite';
 import { PaginatedResult } from '../models/pagination';
 
-// const sleep = (delay: number) => {
-//     return new Promise((resolve) => {
-//         setTimeout(resolve, delay);
-//     });
-// };
+const sleep = (delay: number) => {
+    return new Promise((resolve) => {
+        setTimeout(resolve, delay);
+    });
+};
 
 // Configuração da base URL
 axios.defaults.baseURL = 'http://localhost:5000/api';
@@ -26,7 +26,7 @@ axios.interceptors.request.use((config) => {
 // Interceptador para lidar com respostas e erros
 axios.interceptors.response.use(
     async (response) => {
-        //await sleep(2000); // Simular atraso, se necessário
+        await sleep(2000); // Simular atraso, se necessário
         const pagination = response.headers['pagination'];
         if (pagination) {
             response.data = new PaginatedResult(response.data, JSON.parse(pagination));
@@ -89,8 +89,10 @@ const requests = {
 
 // Serviços relacionados a filmes
 const Movies = {
-    search: (title: string, page: number) =>
-        requests.get<MovieSummary[]>(`/movies/search?title=${title}&page=${page}`),
+    search: (params: URLSearchParams) =>
+        axios
+            .get<MovieSearchResult>('/movies/search', { params }) // Atualize para usar MovieSearchResult
+            .then(responseBody),
     details: (id: string) => requests.get<MovieDetail>(`/movies/${id}`),
 };
 

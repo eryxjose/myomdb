@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../app/stores/store";
 import FavoriteList from "./FavoriteList";
-import { Container, Typography, Divider, Grid, CircularProgress, Box, Button } from "@mui/material";
+import { Container, Typography, Divider, Grid, CircularProgress } from "@mui/material";
 import { PagingParams } from "../../app/models/pagination";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import InfiniteScroll from "react-infinite-scroller";
 
 const FavoriteDashboard = () => {
     const { favoriteStore } = useStore();
-    const { loadFavorites, favoriteRegistry, setPagingParams, pagination } = favoriteStore;
+    const { loadFavorites, favoriteRegistry, setPagingParams, pagination, loadingInitial } = favoriteStore;
     const [loadingNext, setLoadingNext] = useState(false);
 
     function handleGetNext() {
@@ -19,25 +19,22 @@ const FavoriteDashboard = () => {
     }
 
     useEffect(() => {
-        if (favoriteRegistry.size <= 1) loadFavorites();
+        if (favoriteRegistry.size <= 1) {
+            loadFavorites();
+        }
     }, [favoriteRegistry.size, loadFavorites]);
 
-    if (favoriteStore.loadingInitial && !loadingNext) {
+    if (loadingInitial && !loadingNext) {
         return <LoadingComponent content="Loading....." />;
-        // return (
-        //     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        //         <CircularProgress />
-        //     </Box>
-        // );
     }
 
     return (
-        <Container>
+        <Container style={{ marginBottom: "17em" }}>
             <Typography variant="h4" align="center" gutterBottom>
                 My Favorite Movies
             </Typography>
             <Divider />
-            {favoriteStore.favoritesByTitle.length > 0 ? (
+            {favoriteRegistry.size > 0 ? ( // Verifica se há favoritos no registro
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <InfiniteScroll 
@@ -47,7 +44,7 @@ const FavoriteDashboard = () => {
                             loader={<div key={0} style={{ textAlign: "center" }}><CircularProgress /></div>}
                             initialLoad={false}
                         >
-                            <FavoriteList favorites={favoriteStore.favoritesByTitle} />
+                            <FavoriteList favorites={Array.from(favoriteRegistry.values())} /> {/* Converte o Map em array */}
                         </InfiniteScroll>
                     </Grid>
                 </Grid>

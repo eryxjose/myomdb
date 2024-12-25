@@ -20,11 +20,11 @@ export default class UserStore {
         try {
             const user = await agent.Account.login(creds);
             store.commonStore.setToken(user.token);
-            runInAction(() => {
-                this.user = user;
-            });
-            router.navigate('/movies'); // Atualize para a rota apropriada
+            runInAction(() => this.user = user);
+            store.favoriteStore.loadFavorites();
             store.modalStore?.closeModal(); // Verifique se modalStore está sendo usado
+            router.navigate('/movies');
+            console.log('Navigating to /movies'); // Atualize para a rota apropriada
         } catch (error) {
             toast.error('Falha no login. Verifique suas credenciais.');
             throw error;
@@ -33,9 +33,11 @@ export default class UserStore {
 
     logout = () => {
         store.commonStore.setToken(null);
+        localStorage.removeItem('jwt'); // Certifique-se de que o token seja removido
         runInAction(() => {
             this.user = null;
         });
+        store.favoriteStore.clearFavorites(); 
         toast.info('Você saiu do sistema.');
         router.navigate('/');
     };

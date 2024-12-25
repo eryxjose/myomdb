@@ -8,7 +8,8 @@ export default class MovieStore {
     searchQuery: string = "";
     loading = false;
     loadingInitial = true;
-    page = 1;
+    totalResults: number = 0; // Total de resultados retornados pela API
+    currentPage: number = 1; // Página atual
 
     constructor() {
         makeAutoObservable(this);
@@ -24,14 +25,26 @@ export default class MovieStore {
         );
     }
 
-    loadMovies = async (searchQuery: string = "") => {
+    loadMovies = async () => {
         this.setLoadingInitial(true);
-        
+
         try {
-            const movies = await agent.Movies.search(searchQuery, this.page);
+            const result = await agent.Movies.search(
+                new URLSearchParams({
+                    search: this.searchQuery,
+                    pageNumber: this.currentPage.toString(),
+                })
+            );
             runInAction(() => {
-                this.movieRegistry.clear(); // Limpa o registro atual
-                movies.forEach((movie) => this.setMovie(movie));
+                if (result.search && Array.isArray(result.search)) {
+                    if (this.currentPage === 1) {
+                        this.movieRegistry.clear(); // Limpa somente se for a primeira página
+                    }
+                    result.search.forEach((movie) => this.setMovie(movie));
+                    this.totalResults = parseInt(result.totalResults);
+                } else {
+                    console.error("Invalid response structure:", result);
+                }
                 this.setLoadingInitial(false);
             });
         } catch (error) {
@@ -40,17 +53,21 @@ export default class MovieStore {
         }
     };
 
+    setCurrentPage = (page: number) => {
+        this.currentPage = page;
+    }
+
     loadMovieDetails = async (id: string) => {
-        this.loading = true;
+        this.setLoadingInitial(true);
         try {
             const movieDetails = await agent.Movies.details(id);
             runInAction(() => {
                 this.selectedMovie = movieDetails;
-                this.loading = false;
+                this.setLoadingInitial(false);
             });
         } catch (error) {
             console.log(error);
-            runInAction(() => (this.loading = false));
+            runInAction(() => (this.setLoadingInitial(false)));
         }
     };
 
@@ -68,5 +85,11 @@ export default class MovieStore {
 
     setLoadingInitial = (state: boolean) => {
         this.loadingInitial = state;
+    };
+
+    loadNextPage = async () => {
+        if (this.currentPage * 10 >= this.totalResults) return; // Sem mais páginas para carregar
+        this.currentPage++;
+        await this.loadMovies();
     };
 }

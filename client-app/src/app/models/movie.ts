@@ -26,3 +26,9 @@ export interface MovieDetail {
     runtime: string;     // Duração do filme
     released: string;    // Data de lançamento
 }
+
+export interface MovieSearchResult {
+    search: MovieSummary[]; // Lista de filmes retornados
+    totalResults: string; // Total de resultados encontrados como string
+    response: string; // Indicador de sucesso ("True" ou "False")
+}

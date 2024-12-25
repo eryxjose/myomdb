@@ -44,11 +44,7 @@ export default class FavoriteStore {
         try {
             const result = await agent.Favorites.list(this.axiosParams);
             runInAction(() => {
-                // this.favoriteRegistry.clear();
                 result.data.forEach((favorite) => this.setFavorite(favorite));
-                // favorites.forEach((favorite) => {
-                //     this.favoriteRegistry.set(favorite.id, favorite);
-                // });
                 this.setPagination(result.pagination);
                 this.setLoadingInitial(false);
             });
@@ -101,7 +97,6 @@ export default class FavoriteStore {
     };
 
     setFavorite = (favorite: FavoriteMovie) => {
-        console.log(favorite);
         this.favoriteRegistry.set(favorite.id, favorite);
     }
 
@@ -112,5 +107,9 @@ export default class FavoriteStore {
 
     setLoadingInitial = (state: boolean) => {
         this.loadingInitial = state;
+    };
+
+    clearFavorites = () => {
+        this.favoriteRegistry.clear();
     };
 }

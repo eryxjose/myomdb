@@ -19,21 +19,13 @@ public class MoviesController : BaseApiController
     }
 
     [HttpGet("search")]
-    public async Task<IActionResult> SearchMovies([FromQuery] string title, [FromQuery] int page = 1)
+    public async Task<IActionResult> SearchMovies([FromQuery] MovieParams movieParams)
     {
-        var query = new List.Query
-        {
-            MovieParams = new MovieParams
-            {
-                Search = title,
-                PageNumber = page
-            }
-        };
-
+        var query = new List.Query { MovieParams = movieParams };
         var result = await _mediator.Send(query);
         return HandleResult(result);
     }
-
+    
     [HttpGet("{imdbId}")]
     public async Task<IActionResult> GetMovieDetails(string imdbId)
     {

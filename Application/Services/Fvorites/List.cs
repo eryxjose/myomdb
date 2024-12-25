@@ -36,11 +36,9 @@ public class List
                 return Result<PagedList<FavoriteMovie>>.Failure("Usuário não encontrado.");
 
             var query = _context.FavoriteMovies
-                .OrderBy(x => x.Title)
                 .Where(x => x.UserId == user.Id)
                 .AsNoTracking()
                 .AsQueryable();
-                //.ToListAsync(cancellationToken);
 
             return Result<PagedList<FavoriteMovie>>.Success(
                 await PagedList<FavoriteMovie>.CreateAsync(query, request.PagingParams.PageNumber, 

@@ -19,7 +19,7 @@ export default function NotFound() {
                     variant="contained"
                     color="primary"
                 >
-                    Retornar para a página de agendamentos
+                    Retornar para a página de filmes
                 </Button>
             </Box>
         </Container>

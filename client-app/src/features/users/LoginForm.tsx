@@ -3,13 +3,20 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "../../app/stores/store";
 import MyTextInput from "../../app/common/form/MyTextInput";
 import { Box, Button, Typography, Alert } from "@mui/material";
+import * as Yup from "yup";
 
 export default observer(function LoginForm() {
     const { userStore } = useStore();
+    
+    const validationSchema = Yup.object({
+        email: Yup.string().email("Invalid email").required("Email is required"),
+        password: Yup.string().required("Password is required"),
+    });
 
     return (
         <Formik
             initialValues={{ email: "", password: "", error: null }}
+            validationSchema={validationSchema}
             onSubmit={(values, { setErrors }) =>
                 userStore
                     .login(values)

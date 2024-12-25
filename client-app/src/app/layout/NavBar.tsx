@@ -1,8 +1,9 @@
-import { AppBar, Toolbar, Typography, Button, Box, Menu, MenuItem } from "@mui/material";
+import { AppBar, Toolbar, Typography, Button, Box, Menu, MenuItem, IconButton, Avatar } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useStore } from "../stores/store";
 import { observer } from "mobx-react-lite";
+import { router } from "../router/Routes";
 
 function NavBar() {
     const {userStore } = useStore();
@@ -12,7 +13,12 @@ function NavBar() {
     useEffect(() => {
         userStore.getUser();
     }, [userStore, isLoggedIn]);
-    console.log(isLoggedIn);
+    
+    useEffect(() => {
+        if (!user) {
+            router.navigate('/');
+        }
+    }, [user]);
 
     const handleMenuClose = () => {
         setAnchorEl(null);
@@ -50,7 +56,15 @@ function NavBar() {
                 </Box>
                 {user && isLoggedIn && (
                     <Box sx={{ marginLeft: 2, display: "flex", alignItems: "center" }}>
-                        {user.displayName}
+                        <Typography variant="body1" sx={{ marginRight: 1 }}>
+                            {user.displayName}
+                        </Typography>
+                        <IconButton
+                            onClick={(event) => setAnchorEl(event.currentTarget)}
+                            color="inherit"
+                        >
+                            <Avatar>{user.displayName.charAt(0)}</Avatar>
+                        </IconButton>
                         <Menu
                             anchorEl={anchorEl}
                             open={Boolean(anchorEl)}
@@ -71,12 +85,18 @@ function NavBar() {
                             >
                                 Meu Perfil
                             </MenuItem>
-                            <MenuItem onClick={() => { logout(); handleMenuClose(); }}>
+                            <MenuItem
+                                onClick={() => {
+                                    logout();
+                                    handleMenuClose();
+                                }}
+                            >
                                 Sair
                             </MenuItem>
                         </Menu>
                     </Box>
                 )}
+
             </Toolbar>
         </AppBar>
     );
