@@ -10,9 +10,16 @@ public static class IdentityServiceExtensions
 {
     public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
     {
-        services.AddIdentityCore<AppUser>(opt => {
-            opt.Password.RequireNonAlphanumeric = false;
-            opt.User.RequireUniqueEmail = true;
+        services.AddIdentityCore<AppUser>(opt =>
+        {
+            opt.Password.RequireDigit = true;                  // Exige ao menos um número
+            opt.Password.RequiredLength = 4;                  // Exige ao menos 4 caracteres
+            opt.Password.RequireNonAlphanumeric = false;       // Não exige caracteres especiais
+            opt.Password.RequireUppercase = false;             // Não exige letras maiúsculas
+            opt.Password.RequireLowercase = false;             // Não exige letras minúsculas
+            opt.Password.RequiredUniqueChars = 1;             // Exige ao menos 1 caractere único
+
+            opt.User.RequireUniqueEmail = true;                // Exige e-mails únicos
         })
             .AddEntityFrameworkStores<DataContext>();
 

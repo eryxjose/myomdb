@@ -7,11 +7,11 @@ import { MovieDetail, MovieSearchResult } from '../models/movie';
 import { FavoriteMovie } from '../models/favorite';
 import { PaginatedResult } from '../models/pagination';
 
-const sleep = (delay: number) => {
-    return new Promise((resolve) => {
-        setTimeout(resolve, delay);
-    });
-};
+// const sleep = (delay: number) => {
+//     return new Promise((resolve) => {
+//         setTimeout(resolve, delay);
+//     });
+// };
 
 // Configuração da base URL
 axios.defaults.baseURL = 'http://localhost:5000/api';
@@ -26,7 +26,7 @@ axios.interceptors.request.use((config) => {
 // Interceptador para lidar com respostas e erros
 axios.interceptors.response.use(
     async (response) => {
-        await sleep(2000); // Simular atraso, se necessário
+        //await sleep(2000); // Simular atraso, se necessário
         const pagination = response.headers['pagination'];
         if (pagination) {
             response.data = new PaginatedResult(response.data, JSON.parse(pagination));

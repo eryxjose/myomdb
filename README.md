@@ -1,5 +1,5 @@
 
-# MyOMDb Application
+# MyOMDb App
 
 MyOMDb é uma aplicação para buscar informações de filmes e gerenciar favoritos utilizando a API OMDb. O projeto utiliza um backend em .NET e um frontend em React.
 
