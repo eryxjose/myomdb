@@ -50,7 +50,7 @@ function NavBar() {
                             fontWeight: isMovies ? "bold" : "normal",
                         }}
                     >
-                        Filmes
+                        SEARCH
                     </Button>
                         <Button
                         color="inherit"
@@ -60,7 +60,7 @@ function NavBar() {
                             fontWeight: isFavorites ? "bold" : "normal",
                         }}
                     >
-                        Favoritos
+                        FAVORITES
                     </Button>
                 </Box>
                 {user && isLoggedIn && (
@@ -92,7 +92,7 @@ function NavBar() {
                                 to={`/Profile/${user.username}`}
                                 onClick={handleMenuClose}
                             >
-                                Meu Perfil
+                                MY PROFILE
                             </MenuItem>
                             <MenuItem
                                 onClick={() => {
@@ -100,7 +100,7 @@ function NavBar() {
                                     handleMenuClose();
                                 }}
                             >
-                                Sair
+                                LOGOUT
                             </MenuItem>
                         </Menu>
                     </Box>

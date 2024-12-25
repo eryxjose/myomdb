@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import {
     Box,
     Button,
@@ -19,6 +19,7 @@ const MovieDetails = () => {
     const { selectedMovie, loadingInitial } = movieStore;
     
     const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate(); 
 
     useEffect(() => {
         if (id) {
@@ -43,8 +44,8 @@ const MovieDetails = () => {
                     Movie not found
                 </Typography>
                 <Box display="flex" justifyContent="center" mt={2}>
-                    <Button variant="contained" color="primary" component={Link} to="/movies">
-                        Back to list
+                    <Button variant="contained" color="primary" onClick={() => navigate(-1)}>
+                        Back
                     </Button>
                 </Box>
             </Container>
@@ -54,8 +55,8 @@ const MovieDetails = () => {
     return (
         <Container maxWidth="md">
             <Box mb={3}>
-                <Button variant="outlined" component={Link} to="/movies" color="primary">
-                    Back to list
+                <Button variant="contained" color="primary" onClick={() => navigate(-1)}>
+                    Back
                 </Button>
             </Box>
             <Card>

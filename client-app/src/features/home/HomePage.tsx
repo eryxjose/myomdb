@@ -26,12 +26,12 @@ const HomePage = () => {
         >
             <Container>
                 <Typography variant="h3" gutterBottom>
-                    Bem-vindo ao Sistema MyOMDB
+                    Wellcome to MyOMDB
                 </Typography>
                 {user && isLoggedIn ? (
                     <>
                         <Typography variant="h5" gutterBottom>
-                            Bem-vindo de volta {user.displayName}!
+                            Wellcome back {user.displayName}!
                         </Typography>
                         <Button
                             component={Link}
@@ -44,13 +44,13 @@ const HomePage = () => {
                                 console.log("Navigating to /movies");
                             }}
                         >
-                            Pesquisar Filmes
+                            Search Movies
                         </Button>
                     </>
                 ) : (
                     <>
                         <Typography variant="h5" gutterBottom>
-                            Faça login para pesquisar e favoritar seus filmes.
+                            Login to search and favorite your movies.
                         </Typography>
                         <Button
                             onClick={() => modalStore.openModal(<LoginForm />)}
@@ -59,7 +59,7 @@ const HomePage = () => {
                             size="large"
                             sx={{ mt: 2, mr: 1 }}
                         >
-                            Entrar
+                            LOGIN
                         </Button>
                         <Button
                             onClick={() => modalStore.openModal(<RegisterForm />)}
@@ -68,7 +68,7 @@ const HomePage = () => {
                             size="large"
                             sx={{ mt: 2 }}
                         >
-                            Cadastre-se
+                            REGISTER
                         </Button>
                     </>
                 )}
